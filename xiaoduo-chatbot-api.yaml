@@ -1,0 +1,133 @@
+swagger: "2.0"
+info:
+  description: "xiaoduo chatbot api"
+  version: 1.0.0
+  title: Xiaoduo Chatbot open api
+  license:
+    name: Apache-2.0
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+host: cvd.xiaoduoai.com
+basePath: /v1/api
+tags:
+  - name: tenant
+    description: tenant
+schemes:
+  - https
+paths:
+  /match_question:
+    post:
+      summary:
+      description:
+      operationId: matchQuestion
+      consumes:
+        - multipart/formData
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: unit_id
+          description: "企业ID"
+          type: int
+          format: int32
+          required: true
+        - in: formData
+          name: channel_id
+          description: 渠道ID
+          type: int
+          format: int32
+          required: true
+        - in: formData
+          name: salt
+          description: "签名加盐,生成方式如下"
+          type: string
+          required: true
+        - in: formData
+          name: sign
+          description: "签名,生成方式如下"
+          type: string
+          required: true
+        - in: formData
+          name: user_id
+          description: "用户ID,要求全局唯一"
+          type: string
+          required: false
+        - in: formData
+          name: nick
+          description: "用户昵称"
+          type: string
+          required: false
+        - in: formData
+          name: question
+          description: 用户提问
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/MatchQuestionRsp"
+definitions:
+  MatchQuestionRsp:
+    allOf:
+      - $ref: "#/definitions/APIResponse"
+      - type: object
+        properties:
+          data:
+            type: object
+            properties:
+              msg_id:
+                type: string
+              user_id:
+                type: integer
+                format: int64
+              question:
+                type: string
+              answers:
+                type: array
+                items:
+                  type: string
+              options:
+                type: array
+                items:
+                  type: string
+              recommend:
+                type: array
+                items:
+                  type: string
+              related_questions:
+                type: array
+                items:
+                  type: string
+              hot_questions:
+                type: array
+                items:
+                  type: string
+              inspects:
+                type: array
+                items:
+                  type:
+                    $ref: "#/definitions/Inspect"
+              state:
+                type: integer
+                format: int32
+  Inspect:
+    type: object
+    properties:
+      id:
+        type: string
+      question:
+        type: string
+      confidence:
+        type: float
+      accept:
+        type: bool
+  APIResponse:
+    title: APIResponse
+    description: ""
+    properties:
+      error_code:
+        type: integer
+        format: int32
+        description: 响应码
+      info:
+        type: string
