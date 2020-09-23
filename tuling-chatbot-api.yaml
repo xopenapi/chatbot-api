@@ -1,0 +1,170 @@
+swagger: "2.0"
+info:
+  description: "图灵聊天机器人API"
+  version: 1.0.0
+  title: 图灵聊天机器人API
+  license:
+    name: Apache-2.0
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+host: openapi.tuling123.com
+basePath: /
+schemes:
+  - http
+paths:
+  /openapi/api/v2:
+    post:
+      summary: 问答
+      description: 问答
+      operationId: chat
+      consumes:
+        - application/json
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/ChatReq"
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/ChatRsp"
+definitions:
+  ChatReq:
+    type: object
+    properties:
+      reqType:
+        type: integer
+        format: int32
+        description: 输入类型:0-文本(默认)、1-图片、2-音频
+      perception:
+        $ref: "#/definitions/Perception"
+      userInfo:
+        $ref: "#/definitions/UserInfo"
+  UserInfo:
+    type: object
+    description: 用户参数
+    properties:
+      apiKey:
+        type: string
+        description: 机器人标识
+        required: true
+      userId:
+        type: string
+        description: 用户唯一标识
+        required: true
+      groupId:
+        type: string
+        description: 群聊唯一标识
+        required: false
+      userIdName:
+        type: string
+        description: 群内用户昵称
+        required: false
+  Perception:
+    type: object
+    description: 输入信息
+    properties:
+      inputText:
+        $ref: "#/definitions/InputText"
+      inputImage:
+        $ref: "#/definitions/InputImage"
+      inputMedia:
+        description: 音频信息
+        $ref: "#/definitions/InputMedia"
+      selfInfo:
+        $ref: "#/definitions/SelfInfo"
+  SelfInfo:
+    type: object
+    description: 地理位置信息
+    properties:
+      location:
+        $ref: "#/definitions/Location"
+  InputText:
+    type: object
+    description: 文本信息
+    properties:
+      text:
+        type: string
+  InputImage:
+    type: object
+    description: 图片信息
+    properties:
+      url:
+        type: string
+  InputMedia:
+    type: object
+    properties:
+      url:
+        type: string
+        description: 音频地址
+
+  Location:
+    type: object
+    properties:
+      city:
+        type: string
+      province:
+        type: string
+      street:
+        type: string
+  Inspect:
+    type: object
+    properties:
+      id:
+        type: string
+      question:
+        type: string
+      confidence:
+        type: float
+      accept:
+        type: bool
+  ChatRsp:
+    type: object
+    properties:
+      intent:
+        $ref: "#/definitions/Intent"
+      results:
+        type: array
+        items:
+          $ref: "#/definitions/ReplyResult"
+  Intent:
+    type: object
+    description: 请求意图
+    properties:
+      code:
+        type: integer
+        format: int32
+        description: 输出功能code
+        required: true
+      intentName:
+        type: string
+        description: 意图名称
+        required: false
+      actionName:
+        type: string
+        description: 意图动作名称
+        required: false
+      parameters:
+        type: map
+        description: 功能相关参数
+        required: false
+
+  ReplyResult:
+    type: object
+    description: 输出结果集
+    properties:
+      resultType:
+        type: string
+        description: 输出类型
+        required: true
+      values:
+        type: map
+        required: true
+      groupType:
+        type: integer
+        format: int32
+        required: true

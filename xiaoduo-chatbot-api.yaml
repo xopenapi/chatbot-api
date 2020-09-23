@@ -8,9 +8,6 @@ info:
     url: "https://www.apache.org/licenses/LICENSE-2.0.html"
 host: cvd.xiaoduoai.com
 basePath: /v1/api
-tags:
-  - name: tenant
-    description: tenant
 schemes:
   - https
 paths:
