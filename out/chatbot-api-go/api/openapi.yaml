@@ -1,0 +1,219 @@
+openapi: 3.0.1
+info:
+  description: 聊天机器人 OpenAPI
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: Chatbot 聊天机器人 OpenAPI
+  version: 1.0.0
+servers:
+- url: http://api.lucfish.com/chatbot/v1
+tags: []
+paths:
+  /chat/sendAndReply:
+    post:
+      description: 发送/接受消息
+      operationId: sendAndReply
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatRsp'
+          description: successful operation
+      summary: 发送/接受消息
+      tags:
+      - chat
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    ChatReq:
+      example:
+        userInfo:
+          userIdName: userIdName
+          groupId: groupId
+          botId: botId
+          userId: userId
+        reqType: 0
+        channelId: channelId
+        perception:
+          selfInfo:
+            location:
+              province: province
+              city: city
+              street: street
+          inputMedia:
+            url: url
+          inputText:
+            text: text
+          inputImage:
+            url: url
+      properties:
+        channelId:
+          description: 图灵/小多
+          type: string
+        reqType:
+          description: 输入类型:0-文本(默认)、1-图片、2-音频
+          format: int32
+          type: integer
+        perception:
+          $ref: '#/components/schemas/Perception'
+        userInfo:
+          $ref: '#/components/schemas/UserInfo'
+      type: object
+    UserInfo:
+      description: 用户参数
+      example:
+        userIdName: userIdName
+        groupId: groupId
+        botId: botId
+        userId: userId
+      properties:
+        botId:
+          description: 绑定的机器人标识
+          type: string
+        userId:
+          description: 用户唯一标识
+          type: string
+        groupId:
+          description: 群聊唯一标识
+          type: string
+        userIdName:
+          description: 群内用户昵称
+          type: string
+      type: object
+    Perception:
+      description: 输入信息
+      example:
+        selfInfo:
+          location:
+            province: province
+            city: city
+            street: street
+        inputMedia:
+          url: url
+        inputText:
+          text: text
+        inputImage:
+          url: url
+      properties:
+        inputText:
+          $ref: '#/components/schemas/InputText'
+        inputImage:
+          $ref: '#/components/schemas/InputImage'
+        inputMedia:
+          $ref: '#/components/schemas/InputMedia'
+        selfInfo:
+          $ref: '#/components/schemas/SelfInfo'
+      type: object
+    SelfInfo:
+      description: 地理位置信息
+      example:
+        location:
+          province: province
+          city: city
+          street: street
+      properties:
+        location:
+          $ref: '#/components/schemas/Location'
+      type: object
+    InputText:
+      description: 文本信息
+      example:
+        text: text
+      properties:
+        text:
+          type: string
+      type: object
+    InputImage:
+      description: 图片信息
+      example:
+        url: url
+      properties:
+        url:
+          type: string
+      type: object
+    InputMedia:
+      example:
+        url: url
+      properties:
+        url:
+          description: 音频地址
+          type: string
+      type: object
+    Location:
+      example:
+        province: province
+        city: city
+        street: street
+      properties:
+        city:
+          type: string
+        province:
+          type: string
+        street:
+          type: string
+      type: object
+    Inspect:
+      properties:
+        id:
+          type: string
+        question:
+          type: string
+      type: object
+    ChatRsp:
+      example:
+        intent:
+          code: 0
+          intentName: intentName
+          actionName: actionName
+        results:
+        - groupType: 6
+          resultType: resultType
+        - groupType: 6
+          resultType: resultType
+      properties:
+        intent:
+          $ref: '#/components/schemas/Intent'
+        results:
+          items:
+            $ref: '#/components/schemas/ReplyResult'
+          type: array
+      type: object
+    Intent:
+      description: 请求意图
+      example:
+        code: 0
+        intentName: intentName
+        actionName: actionName
+      properties:
+        code:
+          description: 输出功能code
+          format: int32
+          type: integer
+        intentName:
+          description: 意图名称
+          type: string
+        actionName:
+          description: 意图动作名称
+          type: string
+      type: object
+    ReplyResult:
+      description: 输出结果集
+      example:
+        groupType: 6
+        resultType: resultType
+      properties:
+        resultType:
+          description: 输出类型
+          type: string
+        groupType:
+          format: int32
+          type: integer
+      type: object
