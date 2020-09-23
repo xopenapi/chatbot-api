@@ -17,7 +17,7 @@ paths:
       description:
       operationId: matchQuestion
       consumes:
-        - multipart/formData
+        - application/x-www-form-urlencoded
       produces:
         - application/json
       parameters:
@@ -47,12 +47,12 @@ paths:
           name: user_id
           description: "用户ID,要求全局唯一"
           type: string
-          required: false
+          required: true
         - in: formData
           name: nick
           description: "用户昵称"
           type: string
-          required: false
+          required: true
         - in: formData
           name: question
           description: 用户提问
@@ -73,10 +73,10 @@ definitions:
             type: object
             properties:
               msg_id:
-                type: string
-              user_id:
                 type: integer
                 format: int64
+              user_id:
+                type: string
               question:
                 type: string
               answers:
@@ -102,8 +102,7 @@ definitions:
               inspects:
                 type: array
                 items:
-                  type:
-                    $ref: "#/definitions/Inspect"
+                  $ref: "#/definitions/Inspect"
               state:
                 type: integer
                 format: int32
