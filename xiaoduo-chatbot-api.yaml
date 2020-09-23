@@ -24,13 +24,13 @@ paths:
         - in: formData
           name: unit_id
           description: "企业ID"
-          type: int
+          type: integer
           format: int32
           required: true
         - in: formData
           name: channel_id
           description: 渠道ID
-          type: int
+          type: integer
           format: int32
           required: true
         - in: formData
